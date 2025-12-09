@@ -61,7 +61,6 @@ int SampleSensors(int state){
     return state;
 }
 int SendVal(int state){
-    // Only send if UART is not busy
     if(!uart_busy){
         uart_busy = 1;
         int len = sprintf((char*)uart_buffer, "%.3f, %.3f\n", ina_avg[0], ina_avg[1]);
@@ -114,7 +113,6 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM3_Init();
 
-  /* USER CODE BEGIN 2 */
   INA219_Init(&ina1, &hi2c1, INA219_ADDRESS1, 0.1f);
   INA219_Init(&ina2, &hi2c1, INA219_ADDRESS2, 0.1f);
 
@@ -134,8 +132,7 @@ int main(void)
   tasks[2].Function = &Relay;
 
   HAL_TIM_Base_Start_IT(&htim3);
-  /* USER CODE END 2 */
-
+    
   while (1)
   {
       for(int i = 0; i < numTasks; i++){
@@ -146,3 +143,4 @@ int main(void)
       }
   }
 }
+
